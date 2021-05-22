@@ -6,3 +6,9 @@ node_modules
 
 # Ignore build files
 build
+
+# Environment varibles
+*.env
+
+# Orm Config files
+ormconfig.json
