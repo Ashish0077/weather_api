@@ -1,0 +1,26 @@
+{
+	"name": "weather_app_backend",
+	"version": "1.0.0",
+	"description": "Backend for a weather app.",
+	"main": "index.js",
+	"scripts": {
+		"start": "npm run build && npm run serve",
+		"serve": "node -r dotenv/config build/server.js",
+		"build": "npm run clean && npm run build-ts",
+		"watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+		"watch-node": "npx nodemon -r dotenv/config build/server.js",
+		"clean": "npx rimraf ./build",
+		"build-ts": "npx tsc",
+		"watch-ts": "npx tsc -w"
+	},
+	"author": "Ashish Arora",
+	"devDependencies": {
+		"@types/node": "^14.14.41",
+		"concurrently": "^6.0.2",
+		"dotenv": "^8.2.0",
+		"nodemon": "^2.0.7",
+		"rimraf": "^3.0.2",
+		"ts-node": "^9.1.1",
+		"typescript": "^4.2.4"
+	}
+}

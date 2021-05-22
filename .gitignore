@@ -1,0 +1,8 @@
+# ignore vs code project config files
+.vscode
+
+# ignore 3rd party lib
+node_modules
+
+# Ignore build files
+build
