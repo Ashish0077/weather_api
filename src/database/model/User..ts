@@ -7,14 +7,14 @@ class User extends BaseModel {
 	@Column()
 	name: string;
 
-	@Column()
+	@Column({ unique: true })
 	email: string;
 
 	@Column()
 	password: string;
 
-	@OneToOne(() => UserPreferences)
-	@JoinColumn()
+	@OneToOne(() => UserPreferences, { eager: true })
+	@JoinColumn({ name: "preference_id" })
 	userPreferences: UserPreferences;
 }
 
