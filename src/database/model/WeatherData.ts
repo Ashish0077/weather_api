@@ -3,7 +3,7 @@ import BaseModel from "./BaseModel";
 
 @Entity("weather_data")
 export default class WeatherData extends BaseModel {
-	@Column()
+	@Column({ unique: true })
 	cityName: string;
 
 	@Column()
@@ -24,12 +24,27 @@ export default class WeatherData extends BaseModel {
 	@Column()
 	windDeg: number;
 
-	@Column()
+	@Column({
+		nullable: true
+	})
 	windGust: number;
 
-	@Column()
+	@Column({ nullable: true })
 	rain1h?: number;
 
-	@Column()
+	@Column({ nullable: true })
+	rain3h?: number;
+}
+
+export interface IWeatherData {
+	cityName: string;
+	currTemp: number;
+	minTemp: number;
+	maxTemp: number;
+	clouds: number;
+	windSpeed: number;
+	windDeg: number;
+	windGust: number;
+	rain1h?: number;
 	rain3h?: number;
 }
