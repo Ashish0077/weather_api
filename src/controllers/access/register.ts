@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getCustomRepository, getRepository } from "typeorm";
-import { BadRequestError } from "../../core/ApiError";
+import { BadRequestError, NotFoundError } from "../../core/ApiError";
 import UserRepo from "../../database/repository/UserRepo";
 import asyncHandler from "../../utils/asyncHandler";
 import bcrypt from "bcrypt";
@@ -15,7 +15,7 @@ const registerUser = asyncHandler(async (req: Request, res: Response, next: Next
 	const userRepo = getCustomRepository(UserRepo);
 	const preferencesRepo = getRepository(UserPreferences);
 	const user = await userRepo.findByEmail(req.body.email);
-	if (user) throw new BadRequestError("User already registered.");
+	if (user) throw new NotFoundError("User already registered.");
 	const preference = preferencesRepo.create({
 		city1: req.body.preferences.city1,
 		city2: req.body.preferences.city2,

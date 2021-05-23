@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import _, { isEmpty } from "lodash";
 import { getCustomRepository, getRepository } from "typeorm";
-import { AuthFailureError, BadRequestError } from "../../core/ApiError";
+import { AuthFailureError, BadRequestError, NotFoundError } from "../../core/ApiError";
 import { SuccessMsgResponse } from "../../core/ApiResponse";
 import UserPreferences from "../../database/model/UserPreferences";
 import UserRepo from "../../database/repository/UserRepo";
@@ -14,7 +14,7 @@ const updateUserPreferences = asyncHandler(
 		const userRepo = getCustomRepository(UserRepo);
 		const user = await userRepo.findByEmail(req.body.email);
 		console.log(user);
-		if (!user) throw new BadRequestError("User does not exist.");
+		if (!user) throw new NotFoundError("User does not exist.");
 		const preferenceRepo = getRepository(UserPreferences);
 		const userPreferences = {
 			city1: req.body.city1 || user.userPreferences.city1,

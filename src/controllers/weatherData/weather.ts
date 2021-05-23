@@ -5,9 +5,11 @@ import { apiKey } from "../../config";
 import fetch from "node-fetch";
 import { IWeatherData } from "../../database/model/WeatherData";
 import WeatherDataRepo from "../../database/repository/WeatherDataRepo";
-import { SuccessMsgResponse } from "../../core/ApiResponse";
+import { SuccessMsgResponse, SuccessResponse } from "../../core/ApiResponse";
 import asyncHandler from "../../utils/asyncHandler";
-import { InternalError } from "../../core/ApiError";
+import { BadRequestError, InternalError, NotFoundError } from "../../core/ApiError";
+import UserRepo from "../../database/repository/UserRepo";
+import _ from "lodash";
 
 const updateWeatherData = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	const weatherRepo = getCustomRepository(WeatherDataRepo);
@@ -33,4 +35,27 @@ const updateWeatherData = asyncHandler(async (req: Request, res: Response, next:
 	new SuccessMsgResponse("Successfully updated weather data.").send(res);
 });
 
-export { updateWeatherData };
+const userWeatherData = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+	if (!req.body.email) throw new BadRequestError("Bad parameters.");
+	const userRepo = getCustomRepository(UserRepo);
+	const user = await userRepo.findByEmail(req.body.email);
+	if (!user) throw new NotFoundError("User does not exist.");
+	const userCities = [
+		user.userPreferences.city1,
+		user.userPreferences.city2,
+		user.userPreferences.city3
+	];
+	const weatherDataRepo = getCustomRepository(WeatherDataRepo);
+	const weatherData: IWeatherData[] = [];
+	for (const city of userCities) {
+		if (city) {
+			console.log(city);
+			const data = await weatherDataRepo.findOne({ cityName: city });
+			if (!data) throw new InternalError("Unable to fetch weather data.");
+			weatherData.push(_.omit(data, ["id"]));
+		}
+	}
+	new SuccessResponse("Success", { weatherData }).send(res);
+});
+
+export { updateWeatherData, userWeatherData };

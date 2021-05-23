@@ -1,7 +1,6 @@
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import BaseModel from "./BaseModel";
 import UserPreferences from "./UserPreferences";
-
 @Entity("users")
 class User extends BaseModel {
 	@Column()
