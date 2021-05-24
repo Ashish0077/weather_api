@@ -1,4 +1,5 @@
 import { Column, Entity, OneToOne } from "typeorm";
+import { cities } from "../../utils/constants";
 import BaseModel from "./BaseModel";
 
 @Entity("user_preferences")

@@ -14,12 +14,13 @@ import _ from "lodash";
 const updateWeatherData = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	const weatherRepo = getCustomRepository(WeatherDataRepo);
 	for (const city of cities) {
-		const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+		console.log(city);
+		const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},IN&appid=${apiKey}`;
 		const response = await fetch(url);
 		if (!response.ok) throw new InternalError("Unable to update weather data.");
 		const data = await response.json();
 		const weatherData: IWeatherData = {
-			cityName: data.name,
+			cityName: city,
 			currTemp: data.main.temp,
 			minTemp: data.main.temp_min,
 			maxTemp: data.main.temp_max,
