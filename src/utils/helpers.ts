@@ -1,6 +1,9 @@
 import _ from "lodash";
-import WeatherData from "../database/model/WeatherData";
+import WeatherData, { IWeatherData } from "../database/model/WeatherData";
 import { cities } from "./constants";
+import fetch from "node-fetch";
+import { InternalError } from "../core/ApiError";
+import { apiKey } from "../config";
 
 // Helper function for checking if the user provided city name is valid or not
 export const isCityValid = (userCity: string): boolean => {
@@ -28,5 +31,25 @@ export const convertTempUnit = (weatherData: WeatherData, unit: string): Weather
 		weatherData.minTemp = kelvinToFahrenheit(weatherData.minTemp);
 		weatherData.maxTemp = kelvinToFahrenheit(weatherData.maxTemp);
 	}
+	return weatherData;
+};
+
+export const fetchWeatherData = async (city: string): Promise<IWeatherData> => {
+	const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},IN&appid=${apiKey}`;
+	const response = await fetch(url);
+	if (!response.ok) throw new InternalError("Unable to update weather data.");
+	const data = await response.json();
+	const weatherData: IWeatherData = {
+		cityName: city,
+		currTemp: data.main.temp,
+		minTemp: data.main.temp_min,
+		maxTemp: data.main.temp_max,
+		windGust: data.wind.gust,
+		windSpeed: data.wind.speed,
+		windDeg: data.wind.deg,
+		clouds: data.clouds.all,
+		rain1h: data.rain?.["1h"] || null,
+		rain3h: data.rain?.["3h"] || null
+	};
 	return weatherData;
 };

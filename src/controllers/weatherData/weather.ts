@@ -10,7 +10,7 @@ import asyncHandler from "../../utils/asyncHandler";
 import { BadRequestError, InternalError, NotFoundError } from "../../core/ApiError";
 import UserRepo from "../../database/repository/UserRepo";
 import _ from "lodash";
-import { convertTempUnit } from "../../utils/helpers";
+import { convertTempUnit, fetchWeatherData } from "../../utils/helpers";
 
 /* 
     @desc    Update weather data
@@ -20,22 +20,7 @@ import { convertTempUnit } from "../../utils/helpers";
 const updateWeatherData = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	const weatherRepo = getCustomRepository(WeatherDataRepo);
 	for (const city of cities) {
-		const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},IN&appid=${apiKey}`;
-		const response = await fetch(url);
-		if (!response.ok) throw new InternalError("Unable to update weather data.");
-		const data = await response.json();
-		const weatherData: IWeatherData = {
-			cityName: city,
-			currTemp: data.main.temp,
-			minTemp: data.main.temp_min,
-			maxTemp: data.main.temp_max,
-			windGust: data.wind.gust,
-			windSpeed: data.wind.speed,
-			windDeg: data.wind.deg,
-			clouds: data.clouds.all,
-			rain1h: data.rain?.["1h"] || null,
-			rain3h: data.rain?.["3h"] || null
-		};
+		const weatherData = await fetchWeatherData(city);
 		await weatherRepo.insertOrUpdate(weatherData);
 		console.log(`${city} updated!`);
 	}
