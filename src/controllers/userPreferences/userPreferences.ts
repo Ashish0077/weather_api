@@ -8,6 +8,11 @@ import UserRepo from "../../database/repository/UserRepo";
 import asyncHandler from "../../utils/asyncHandler";
 import { duplicateCity, isCityValid } from "../../utils/helpers";
 
+/* 
+    @desc    Update user preferences
+    @route   patch /setUserPreferences
+    @access  Private
+*/
 const updateUserPreferences = asyncHandler(
 	async (req: Request, res: Response, next: NextFunction) => {
 		if ((!req.body.city1 && !req.body.city2 && !req.body.city3) || !req.body.email)

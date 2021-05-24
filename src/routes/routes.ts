@@ -4,7 +4,7 @@ import { updateUserPreferences } from "../controllers/userPreferences/userPrefer
 import { updateWeatherData, userWeatherData } from "../controllers/weatherData/weather";
 const router = express.Router();
 
-router.get("/updateWeatherData", updateWeatherData);
+router.post("/updateWeatherData", updateWeatherData);
 router.post("/registerUser", registerUser);
 router.patch("/setUserPreferences", updateUserPreferences);
 router.get("/userWeatherData", userWeatherData);

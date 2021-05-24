@@ -9,6 +9,11 @@ import _ from "lodash";
 import UserPreferences from "../../database/model/UserPreferences";
 import { duplicateCity, isCityValid } from "../../utils/helpers";
 
+/* 
+    @desc    Register User
+    @route   POST /registerUser
+    @access  Public
+*/
 const registerUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	// if any of the required parameters are missing it will throw an BadRequest Error
 	if (!req.body.name || !req.body.email || !req.body.password || !req.body.preferences)

@@ -12,10 +12,14 @@ import UserRepo from "../../database/repository/UserRepo";
 import _ from "lodash";
 import { convertTempUnit } from "../../utils/helpers";
 
+/* 
+    @desc    Update weather data
+    @route   POST /updateWeatherData
+    @access  public
+*/
 const updateWeatherData = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	const weatherRepo = getCustomRepository(WeatherDataRepo);
 	for (const city of cities) {
-		console.log(city);
 		const url = `http://api.openweathermap.org/data/2.5/weather?q=${city},IN&appid=${apiKey}`;
 		const response = await fetch(url);
 		if (!response.ok) throw new InternalError("Unable to update weather data.");
@@ -33,10 +37,16 @@ const updateWeatherData = asyncHandler(async (req: Request, res: Response, next:
 			rain3h: data.rain?.["3h"] || null
 		};
 		await weatherRepo.insertOrUpdate(weatherData);
+		console.log(`${city} updated!`);
 	}
 	new SuccessMsgResponse("Successfully updated weather data.").send(res);
 });
 
+/* 
+    @desc    Get user weather data
+    @route   GET /userWeatherData
+    @access  Private
+*/
 const userWeatherData = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.body.email) throw new BadRequestError("Bad parameters.");
 	const userRepo = getCustomRepository(UserRepo);
