@@ -10,6 +10,7 @@ import asyncHandler from "../../utils/asyncHandler";
 import { BadRequestError, InternalError, NotFoundError } from "../../core/ApiError";
 import UserRepo from "../../database/repository/UserRepo";
 import _ from "lodash";
+import { convertTempUnit } from "../../utils/helpers";
 
 const updateWeatherData = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
 	const weatherRepo = getCustomRepository(WeatherDataRepo);
@@ -46,14 +47,15 @@ const userWeatherData = asyncHandler(async (req: Request, res: Response, next: N
 		user.userPreferences.city2,
 		user.userPreferences.city3
 	];
+	let tempUnit: string = "kelvin";
+	if (req.query.tempUnit != undefined) tempUnit = req.query.tempUnit as string;
 	const weatherDataRepo = getCustomRepository(WeatherDataRepo);
 	const weatherData: IWeatherData[] = [];
 	for (const city of userCities) {
 		if (city) {
-			console.log(city);
 			const data = await weatherDataRepo.findOne({ cityName: city });
 			if (!data) throw new InternalError("Unable to fetch weather data.");
-			weatherData.push(_.omit(data, ["id"]));
+			weatherData.push(_.omit(convertTempUnit(data, tempUnit), ["id"]));
 		}
 	}
 	new SuccessResponse("Success", { weatherData }).send(res);
