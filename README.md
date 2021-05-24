@@ -148,7 +148,7 @@ It is a Weather API which fetches data from https://openweathermap.org/current#d
     ```
 * Get user weather data
     ```
-    GET /userWeatherData
+    GET /userWeatherData?tempUnit=celcius
     Host: localhost:3000
     ```
     * Request Body
@@ -169,9 +169,9 @@ It is a Weather API which fetches data from https://openweathermap.org/current#d
             "createdAt": "2021-05-24T05:05:10.730Z",
             "updatedAt": "2021-05-24T06:21:40.000Z",
             "cityName": "Delhi",
-            "currTemp": 89.33,
-            "minTemp": 89.33,
-            "maxTemp": 89.33,
+            "currTemp": 31.85,
+            "minTemp": 31.85,
+            "maxTemp": 31.85,
             "clouds": 0,
             "windSpeed": 7,
             "windDeg": 317,
@@ -184,9 +184,9 @@ It is a Weather API which fetches data from https://openweathermap.org/current#d
             "createdAt": "2021-05-24T05:05:10.089Z",
             "updatedAt": "2021-05-24T06:21:39.000Z",
             "cityName": "Bangalore",
-            "currTemp": 83.93,
-            "minTemp": 82.13,
-            "maxTemp": 83.93,
+            "currTemp": 28.85,
+            "minTemp": 27.85,
+            "maxTemp": 28.85,
             "clouds": 20,
             "windSpeed": 5,
             "windDeg": 290,
@@ -199,9 +199,9 @@ It is a Weather API which fetches data from https://openweathermap.org/current#d
             "createdAt": "2021-05-24T05:05:11.111Z",
             "updatedAt": "2021-05-24T06:21:40.000Z",
             "cityName": "Kolkata",
-            "currTemp": 85.73,
-            "minTemp": 85.73,
-            "maxTemp": 85.73,
+            "currTemp": 29.85,
+            "minTemp": 29.85,
+            "maxTemp": 29.85,
             "clouds": 75,
             "windSpeed": 4,
             "windDeg": 65,
