@@ -75,21 +75,9 @@ export class SuccessMsgResponse extends ApiResponse {
 	}
 }
 
-export class FailureMsgResponse extends ApiResponse {
-	constructor(message: string) {
-		super(StatusCode.FAILURE, ResponseStatus.SUCCESS, message);
-	}
-}
-
 export class InternalErrorResponse extends ApiResponse {
 	constructor(message: string = "Internal Error") {
 		super(StatusCode.FAILURE, ResponseStatus.INTERNAL_ERROR, message);
-	}
-}
-
-export class AuthFailureResponse extends ApiResponse {
-	constructor(message = "Authentication Failure") {
-		super(StatusCode.FAILURE, ResponseStatus.UNAUTHORIZED, message);
 	}
 }
 

@@ -9,8 +9,11 @@ import _ from "lodash";
 import UserPreferences from "../../database/model/UserPreferences";
 
 const registerUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+	// if any of the required parameters are missing it will throw an BadRequest Error
 	if (!req.body.name || !req.body.email || !req.body.password || !req.body.preferences)
 		throw new BadRequestError("Bad Parameters");
+
+	// User must provide atleast city1 for registeration
 	if (!req.body.preferences.city1) throw new BadRequestError("Atleast select city1");
 	const userRepo = getCustomRepository(UserRepo);
 	const preferencesRepo = getRepository(UserPreferences);
@@ -21,6 +24,14 @@ const registerUser = asyncHandler(async (req: Request, res: Response, next: Next
 		city2: req.body.preferences.city2,
 		city3: req.body.preferences.city3
 	});
+	// This is will make sure no duplicate cities are added
+	if (
+		preference.city1 == preference.city2 ||
+		preference.city1 == preference.city3 ||
+		(preference.city2 && preference.city3 && preference.city2 == preference.city3)
+	) {
+		throw new BadRequestError("Duplicate cities.");
+	}
 	await preferencesRepo.save(preference);
 	const passwordHash = await bcrypt.hash(req.body.password, 10);
 	const createdUser = userRepo.create({
